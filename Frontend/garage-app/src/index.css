@@ -1,0 +1,66 @@
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: #101820;
+  color: #F5F7FA;
+}
+
+:root {
+  --midnight--black: #17243A;
+  --electric-blue: #1677FF;
+  --ice-white: #F5F7FA;
+  --silver-gray: #A7B0BE;
+  --mint-teal: #35D0BA;
+  --light-oringe: #FFD43B;
+  --light-havor: oklch(83.832% 0.10917 96.02);
+  --dark-oringe: #F5C542;
+  --navy-color:#101820;
+  --navy-liner: rgba(255, 255, 255, 0.07);
+  --navy-liner-light: rgba(255, 255, 255, 0.02);
+
+}
+
+body {
+  margin: 0;
+}
+
+td,
+th {
+  overflow-wrap: anywhere;
+}
+
+
+.car-animation {
+  animation: drive-in 2s ease-out forwards;
+}
+
+@keyframes drive-in {
+  from {
+    transform: translateX(100vw);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+.permanent-marker-regular {
+  font-family: "Permanent Marker", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.css-aj4woc-MuiButtonBase-root-MuiButton-root {
+color:var(--navy-color) !important;
+}
+
+
+html, body, #root {
+    min-height: 100%;
+    background-color: #3a3b3d;
+    color:var(--navy-color) !important;
+
+}
