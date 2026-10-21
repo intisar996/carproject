@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from "react";
 import {
   Box,
@@ -13,27 +12,24 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-
+import StarIcon from "@mui/icons-material/Star";
 
 import { useAppSelector } from "../../store/configureStore";
 
 import CustomerServiceRequestForm from "../Customer/CustomerServiceRequestForm";
 
 export default function CustomerGarages() {
-
-  const { garages, status, error } = useAppSelector(
-    (state) => state.customer
-  );
+  const { garages, status, error } = useAppSelector((state) => state.customer);
 
   const [selectedGovernorate, setSelectedGovernorate] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
 
-  const [selectedGarageOptionId, setSelectedGarageOptionId] =
-    useState<number | null>(null);
+  const [selectedGarageOptionId, setSelectedGarageOptionId] = useState<
+    number | null
+  >(null);
 
   const governorates = useMemo(() => {
     return [...new Set(garages.map((garage) => garage.governorate))];
@@ -64,8 +60,7 @@ export default function CustomerGarages() {
           display: "flex",
           justifyContent: "center",
           py: 6,
-        }}
-      >
+        }}>
         <CircularProgress />
       </Box>
     );
@@ -74,12 +69,11 @@ export default function CustomerGarages() {
   if (error) {
     return (
       <Typography
-        color="error"
+        color='error'
         sx={{
           mt: 3,
           textAlign: "center",
-        }}
-      >
+        }}>
         {error}
       </Typography>
     );
@@ -88,12 +82,11 @@ export default function CustomerGarages() {
   if (garages.length === 0) {
     return (
       <Typography
-        color="text.secondary"
+        color='text.secondary'
         sx={{
           mt: 3,
           textAlign: "center",
-        }}
-      >
+        }}>
         No available garages found for this service.
       </Typography>
     );
@@ -107,27 +100,18 @@ export default function CustomerGarages() {
           gap: 2,
           flexWrap: "wrap",
           mb: 4,
-        }}
-      >
+        }}>
         <FormControl sx={{ minWidth: 220 }}>
           <InputLabel>Governorate</InputLabel>
 
           <Select
             value={selectedGovernorate}
-            label="Governorate"
-            onChange={(event) =>
-              setSelectedGovernorate(event.target.value)
-            }
-          >
-            <MenuItem value="">
-              All Governorates
-            </MenuItem>
+            label='Governorate'
+            onChange={(event) => setSelectedGovernorate(event.target.value)}>
+            <MenuItem value=''>All Governorates</MenuItem>
 
             {governorates.map((governorate) => (
-              <MenuItem
-                key={governorate}
-                value={governorate}
-              >
+              <MenuItem key={governorate} value={governorate}>
                 {governorate}
               </MenuItem>
             ))}
@@ -139,47 +123,32 @@ export default function CustomerGarages() {
 
           <Select
             value={selectedPrice}
-            label="Price"
-            onChange={(event) =>
-              setSelectedPrice(event.target.value)
-            }
-          >
-            <MenuItem value="">
-              All Prices
-            </MenuItem>
+            label='Price'
+            onChange={(event) => setSelectedPrice(event.target.value)}>
+            <MenuItem value=''>All Prices</MenuItem>
 
-            <MenuItem value="low">
-              0 - 5 OMR
-            </MenuItem>
+            <MenuItem value='low'>0 - 5 OMR</MenuItem>
 
-            <MenuItem value="medium">
-              5 - 10 OMR
-            </MenuItem>
+            <MenuItem value='medium'>5 - 10 OMR</MenuItem>
 
-            <MenuItem value="high">
-              More than 10 OMR
-            </MenuItem>
+            <MenuItem value='high'>More than 10 OMR</MenuItem>
           </Select>
         </FormControl>
       </Box>
 
       {filteredGarages.length === 0 ? (
         <Typography
-          color="text.secondary"
+          color='text.secondary'
           sx={{
             textAlign: "center",
             py: 4,
-          }}
-        >
+          }}>
           No garages match your filters.
         </Typography>
       ) : (
         <Grid container spacing={3}>
           {filteredGarages.map((garage) => (
-            <Grid
-              size={{ xs: 12, sm: 6, md: 4 }}
-              key={garage.garageOptionId}
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={garage.garageOptionId}>
               <Card
                 sx={{
                   height: "100%",
@@ -190,8 +159,7 @@ export default function CustomerGarages() {
                     transform: "translateY(-4px)",
                     boxShadow: 5,
                   },
-                }}
-              >
+                }}>
                 <CardContent
                   sx={{
                     p: 3,
@@ -199,16 +167,14 @@ export default function CustomerGarages() {
                     flexDirection: "column",
                     height: "100%",
                     boxSizing: "border-box",
-                  }}
-                >
+                  }}>
                   <Typography
-                    variant="h5"
+                    variant='h5'
                     sx={{
                       fontWeight: "bold",
                       color: "#0b1f3a",
                       mb: 2,
-                    }}
-                  >
+                    }}>
                     {garage.garageName}
                   </Typography>
 
@@ -216,15 +182,37 @@ export default function CustomerGarages() {
                     sx={{
                       display: "flex",
                       alignItems: "center",
+                      gap: 0.5,
+                      mb: 2,
+                    }}>
+                    {garage.ratingCount > 0 ? (
+                      <>
+                        <StarIcon sx={{ color: "#F5B301", fontSize: 22 }} />
+
+                        <Typography variant='body2' sx={{fontWeight :"bold"}}>
+                          {garage.averageRating.toFixed(1)} / 5
+                        </Typography>
+
+                        <Typography variant='body2' color='text.secondary'>
+                          ({garage.ratingCount} reviews)
+                        </Typography>
+                      </>
+                    ) : (
+                      <Typography variant='body2' color='text.secondary'>
+                        No ratings yet
+                      </Typography>
+                    )}
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
                       gap: 1,
                       mb: 1.5,
-                    }}
-                  >
-                    <LocationOnIcon
-                      sx={{ color: "#0b1f3a" }}
-                    />
+                    }}>
+                    <LocationOnIcon sx={{ color: "#0b1f3a" }} />
 
-                    <Typography variant="body2">
+                    <Typography variant='body2'>
                       {garage.governorate} - {garage.state}
                     </Typography>
                   </Box>
@@ -235,36 +223,27 @@ export default function CustomerGarages() {
                       alignItems: "center",
                       gap: 1,
                       mb: 1.5,
-                    }}
-                  >
-                    <DirectionsCarIcon
-                      sx={{ color: "#0b1f3a" }}
-                    />
+                    }}>
+                    <DirectionsCarIcon sx={{ color: "#0b1f3a" }} />
 
-                    <Typography variant="body2">
-                      {garage.optionType}
-                    </Typography>
+                    <Typography variant='body2'>{garage.optionType}</Typography>
                   </Box>
 
                   {garage.optionSize && (
                     <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      <strong>Size:</strong>{" "}
-                      {garage.optionSize}
+                      variant='body2'
+                      color='text.secondary'
+                      sx={{ mb: 1 }}>
+                      <strong>Size:</strong> {garage.optionSize}
                     </Typography>
                   )}
 
                   {garage.optionBrand && (
                     <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1 }}
-                    >
-                      <strong>Brand:</strong>{" "}
-                      {garage.optionBrand}
+                      variant='body2'
+                      color='text.secondary'
+                      sx={{ mb: 1 }}>
+                      <strong>Brand:</strong> {garage.optionBrand}
                     </Typography>
                   )}
 
@@ -275,31 +254,25 @@ export default function CustomerGarages() {
                       gap: 1,
                       mt: 2,
                       mb: 3,
-                    }}
-                  >
-                    <AttachMoneyIcon
-                      sx={{ color: "#0b1f3a" }}
-                    />
+                    }}>
+                    <AttachMoneyIcon sx={{ color: "#0b1f3a" }} />
 
                     <Typography
-                      variant="h5"
+                      variant='h5'
                       sx={{
                         fontWeight: "bold",
                         color: "#0b1f3a",
-                      }}
-                    >
+                      }}>
                       {garage.price} OMR
                     </Typography>
                   </Box>
 
                   <Button
-                    variant="contained"
+                    variant='contained'
                     fullWidth
-                    size="large"
+                    size='large'
                     onClick={() =>
-                      setSelectedGarageOptionId(
-                        garage.garageOptionId
-                      )
+                      setSelectedGarageOptionId(garage.garageOptionId)
                     }
                     sx={{
                       mt: "auto",
@@ -310,8 +283,7 @@ export default function CustomerGarages() {
                       "&:hover": {
                         backgroundColor: "#07152a",
                       },
-                    }}
-                  >
+                    }}>
                     Request Service
                   </Button>
                 </CardContent>
@@ -324,9 +296,7 @@ export default function CustomerGarages() {
       {selectedGarageOptionId !== null && (
         <CustomerServiceRequestForm
           garageOptionId={selectedGarageOptionId}
-          onClose={() =>
-            setSelectedGarageOptionId(null)
-          }
+          onClose={() => setSelectedGarageOptionId(null)}
         />
       )}
     </Box>

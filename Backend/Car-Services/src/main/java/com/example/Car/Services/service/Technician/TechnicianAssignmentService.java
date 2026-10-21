@@ -7,10 +7,7 @@ import com.example.Car.Services.DTO.response.OwnerTechnicianAssignmentResponse;
 import com.example.Car.Services.DTO.response.TechnicianTaskResponseDTO;
 import com.example.Car.Services.DTO.response.TrackingResponseDTO;
 import com.example.Car.Services.Interface.Technician.TechnicianAssignmentServiceInterface;
-import com.example.Car.Services.Repository.GarageTechnicianRepository;
-import com.example.Car.Services.Repository.ServiceCustomerRequestRepository;
-import com.example.Car.Services.Repository.TechnicianAssignmentRepository;
-import com.example.Car.Services.Repository.UserRepository;
+import com.example.Car.Services.Repository.*;
 import com.example.Car.Services.constant.GeoConstants;
 import com.example.Car.Services.entities.Garage;
 import com.example.Car.Services.entities.ServiceCustomerRequest;
@@ -39,6 +36,8 @@ public class TechnicianAssignmentService
     private final GarageTechnicianRepository garageTechnicianRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final RatingRepository ratingRepository;
+
 
     @Value("${app.frontend.url}")
     private String frontendUrl;
@@ -49,7 +48,7 @@ public class TechnicianAssignmentService
             ServiceCustomerRequestRepository serviceCustomerRequestRepository,
             GarageTechnicianRepository garageTechnicianRepository,
             UserRepository userRepository,
-            EmailService emailService) {
+            EmailService emailService, RatingRepository ratingRepository) {
 
         this.messagingTemplate = messagingTemplate;
         this.technicianAssignmentRepository = technicianAssignmentRepository;
@@ -57,6 +56,7 @@ public class TechnicianAssignmentService
         this.garageTechnicianRepository = garageTechnicianRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.ratingRepository = ratingRepository;
     }
 
     @Override
@@ -204,11 +204,21 @@ public class TechnicianAssignmentService
                 assignment.getCompletedAt() == null) {
 
             assignment.setCompletedAt(now);
+            ServiceCustomerRequest serviceRequest = assignment.getServiceRequest();
+            serviceRequest.setStatus(ServiceRequestStatus.COMPLETED);
+            serviceCustomerRequestRepository.save(serviceRequest);
+
+            if(serviceRequest.getGuestEmail() != null && !serviceRequest.getGuestEmail().isBlank()){
+                emailService.sendRatingEmail(serviceRequest.getGuestEmail(),
+                                             serviceRequest.getGuestName(),
+                                             serviceRequest.getTrackingToken());
+            }
+
+
+
         }
 
-        technicianAssignmentRepository.save(
-                assignment
-        );
+        technicianAssignmentRepository.save(assignment);
 
         TrackingResponseDTO trackingResponse =
                 new TrackingResponseDTO(

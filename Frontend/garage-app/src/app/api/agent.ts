@@ -1,14 +1,10 @@
 import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
-
 import type { ChangePasswordRequest,AdminUser, EmailValidationResponse,LoginRequest,LoginResponse, ResetPasswordRequest, UserRequest,} from "../models/User";
-
 import type { MessageResponse, PageResponse } from "../models/Common";
 import type {DecisionRequest,RegistrationDocument,} from "../models/RegistrationDocument";
 import type { Garage } from "../models/Garage";
 import type {Technician,TechnicianRequest,LocationUpdateRequest,} from "../models/Technician";
-
 import type {ServiceItem,ServiceOption, ServiceOptionRequest, ServiceRequest,} from "../models/Service";
-
 import { clearStoredUser } from "../utils/authStorage";
 import type { CreateSubscriptionRequest, SubscriptionPlan } from "../models/Subscription";
 import type { GarageServiceOption, GarageServiceOptionRequest } from "../models/GarageServiceOption";
@@ -19,6 +15,9 @@ import type { TechnicianAssignment } from "../models/TechnicianAssignment";
 import type { RepairPhoto } from "../models/RepairPhoto";
 import type { OwnerTechnicianAssignment } from "../models/OwnerTechnicianAssignment";
 import type { OwnerRepairPhoto } from "../models/OwnerRepairPhoto";
+import type { CreateRatingRequest, RatingResponse } from "../models/Rating";
+
+
 
 axios.defaults.baseURL = "http://localhost:8080/api/";
 axios.defaults.withCredentials = false;
@@ -371,10 +370,14 @@ const OwnerAssignments = {
 
 
 const Tracking = {
-    getTracking: (trackingToken: string) =>
-        requests.get<CustomerTrackingResponse>(
-            `tracking/${trackingToken}`
-        ),
+    getTracking: (trackingToken: string) =>requests.get<CustomerTrackingResponse>(`tracking/${trackingToken}`),
+};
+
+
+const Ratings = {
+  submit: (trackingToken: string, values: CreateRatingRequest) =>requests.post<MessageResponse>(
+      `ratings/${encodeURIComponent(trackingToken)}`,values),
+  getRating: (requestId: number) => requests.get<RatingResponse>(`/ratings/owner/request/${requestId}`),    
 };
 
 
@@ -393,7 +396,9 @@ const agent = {
   Customer,
   OwnerAssignments,
   ServiceRequests,
-  Tracking
+  Tracking,
+   Ratings,
+
 };
 
 export default agent;

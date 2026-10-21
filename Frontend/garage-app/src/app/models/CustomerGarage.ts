@@ -14,4 +14,7 @@ export interface CustomerGarage {
   optionBrand: string | null;
 
   price: number;
+
+  averageRating: number;
+  ratingCount: number;
 }

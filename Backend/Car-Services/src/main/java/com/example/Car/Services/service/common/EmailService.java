@@ -614,6 +614,36 @@ public class EmailService implements EmailServiceInterface {
     }
 
 
+    @Override
+    @Async
+    public void sendRatingEmail(String toEmail, String fullName, String trackingToken) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(toEmail);
+            message.setSubject("Car Services - Rate Your Service");
+
+            String ratingLink = frontendUrl + "/rate-service/" + trackingToken;
+
+            String emailBody = "Dear " + fullName + ",\n\n"
+                            + "Your car service has been completed successfully.\n\n"
+                            + "We would appreciate your feedback. "
+                            + "Please rate your service using the link below:\n\n"
+                            + ratingLink + "\n\n"
+                            + "Thank you for choosing Car Services!\n\n"
+                            + "Best regards,\n"
+                            + "Car Services Team";
+
+            message.setText(emailBody);
+            mailSender.send(message);
+
+            log.info("Rating email sent to {}", toEmail);
+
+        } catch (Exception ex) {
+            log.error("Failed to send rating email to {}", toEmail, ex);
+            throw new EmailSendingException("Failed to send rating email");
+        }
+    }
 
 
 

@@ -41,6 +41,7 @@ import CustomerTracking from "../../features/Customer/CustomerTracking";
 import OwnerTechnicianTasks from "../../features/GarageOwner/OwnerTechnicianTasks";
 import TechnicianTaskDetails from "../../features/Technician/TechnicianTaskDetails";
 import OwnerServiceRequestDetails from "../../features/GarageOwner/OwnerServiceRequestDetails";
+import RatingPage from "../../features/Customer/RatingPage";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,8 @@ export const router = createBrowserRouter([
           { path: "unauthorized", element: <Unauthorized /> },
           { path: "/garages/:serviceId", element: <CustomerGaragesPage /> },
           { path: "/track/:trackingToken", element: <CustomerTracking /> },
+          { path: "/rate-service/:trackingToken", element: <RatingPage /> },
+          
         ],
       },
 

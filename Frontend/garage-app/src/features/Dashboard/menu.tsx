@@ -35,7 +35,7 @@ export function menuForRole(role: Role): DashboardMenuItem[] {
         {labelKey: "menu.subscriptionPlans",path: paths.ownerSubscriptions,icon: <ListAltTwoTone />,},
          {labelKey: "menu.GarageAddServicePrice",path: paths.ownerServiceOptions,icon: <ListAltTwoTone />,},
          {labelKey: "menu.ownerServiceCustomerRequest",path: paths.ownerServiceCustomerRequest,icon: <ListAltTwoTone />,},
-         {labelKey: "menu.technicianTasks",path: paths.ownerTechnicianTasks,icon: <Assessment />,},
+        //  {labelKey: "menu.technicianTasks",path: paths.ownerTechnicianTasks,icon: <Assessment />,},
       ];
     case Role.TECHNICIAN:
       return [

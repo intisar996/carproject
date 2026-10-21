@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {Alert,Box,Button,Card,CardContent,Chip,CircularProgress,Divider,
-  Grid,Stack,Typography,} from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonIcon from "@mui/icons-material/Person";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -11,6 +22,7 @@ import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import agent from "../../app/api/agent";
 import TechnicianRouteMap from "../Technician/TechnicianRouteMap";
 import { toast } from "react-toastify";
+import type { RatingResponse } from "../../app/models/Rating";
 
 type Request = Awaited<
   ReturnType<typeof agent.ServiceRequests.getOwnerRequests>
@@ -34,6 +46,9 @@ export default function OwnerServiceRequestDetails() {
   const [photoSources, setPhotoSources] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [rating, setRating] = useState<RatingResponse | null>(null);
+  const [ratingLoading, setRatingLoading] = useState(true);
+  const [ratingError, setRatingError] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -73,6 +88,26 @@ export default function OwnerServiceRequestDetails() {
 
         setRequest(selectedRequest);
         setAssignment(selectedAssignment);
+
+        setRatingLoading(true);
+        setRatingError(false);
+
+        try {
+          const ratingResponse = await agent.Ratings.getRating(id);
+
+          if (active) {
+            setRating(ratingResponse ?? null);
+          }
+        } catch {
+          if (active) {
+            setRating(null);
+            setRatingError(true);
+          }
+        } finally {
+          if (active) {
+            setRatingLoading(false);
+          }
+        }
 
         try {
           const photosResponse =
@@ -470,6 +505,67 @@ export default function OwnerServiceRequestDetails() {
                     );
                   })}
                 </Grid>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Customer Rating */}
+        <Grid size={{ xs: 12 }}>
+          <Card sx={{ borderRadius: 3 }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant='h6' sx={{ fontWeight: 700, mb: 2 }}>
+                Customer Rating & Review
+              </Typography>
+
+              <Divider sx={{ mb: 3 }} />
+
+              {ratingLoading ? (
+                <CircularProgress size={24} />
+              ) : ratingError ? (
+                <Alert severity='error'>Unable to load customer rating.</Alert>
+              ) : !rating ? (
+                <Alert severity='info'>No rating submitted yet.</Alert>
+              ) : (
+                <Stack spacing={2}>
+                  <Stack direction='row' spacing={0.5} alignItems='center'>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Typography
+                        key={star}
+                        sx={{
+                          fontSize: 28,
+                          color: star <= rating.stars ? "#F5A623" : "#D1D5DB",
+                        }}>
+                        ★
+                      </Typography>
+                    ))}
+
+                    <Typography sx={{ ml: 1, fontWeight: 700 }}>
+                      {rating.stars}/5
+                    </Typography>
+                  </Stack>
+
+                  <Box>
+                    <Typography
+                      variant='body2'
+                      color='text.secondary'
+                      sx={{ mb: 0.5 }}>
+                      Customer Comment
+                    </Typography>
+
+                    <Typography>
+                      {rating.comment?.trim() || "No comment provided."}
+                    </Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant='body2' color='text.secondary'>
+                      Rating Date
+                    </Typography>
+
+                    <Typography>{formatDate(rating.createdAt)}</Typography>
+                  </Box>
+                </Stack>
               )}
             </CardContent>
           </Card>

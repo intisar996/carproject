@@ -4,7 +4,7 @@ import com.example.Car.Services.DTO.request.RejectServiceRequestRequest;
 import com.example.Car.Services.DTO.request.ServiceCustomerRequestRequest;
 import com.example.Car.Services.DTO.response.ServiceCustomerRequestResponse;
 import com.example.Car.Services.entities.User;
-import com.example.Car.Services.service.ServiceCustomerRequestService;
+import com.example.Car.Services.service.Customer.ServiceCustomerRequestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

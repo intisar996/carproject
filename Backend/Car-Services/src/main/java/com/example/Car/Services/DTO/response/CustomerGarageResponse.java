@@ -31,6 +31,11 @@ public class CustomerGarageResponse {
 
     private BigDecimal price;
 
+    private Double averageRating;
+    private Long ratingCount;
+
+
+
 
     public static CustomerGarageResponse convertTo(
             GarageServiceOption garageServiceOption) {
