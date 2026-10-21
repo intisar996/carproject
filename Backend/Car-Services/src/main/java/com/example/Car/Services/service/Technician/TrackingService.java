@@ -30,14 +30,6 @@ public class TrackingService {
 
         String technicianName = assignment.getTechnician().getUser().getFullName();
 
-        return new CustomerTrackingResponse(
-                request.getRequestId(),
-                assignment.getAssignmentId(),
-                garageName,
-                technicianName,
-                assignment.getStatus(),
-                assignment.getCurrentLatitude(),
-                assignment.getCurrentLongitude()
-        );
+        return  CustomerTrackingResponse.convertToDTO(request,assignment,garageName,technicianName);
     }
 }

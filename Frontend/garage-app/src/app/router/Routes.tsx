@@ -39,6 +39,8 @@ import CustomerGaragesPage from "../../features/Customer/CustomerGaragesPage";
 import OwnerServiceRequests from "../../features/GarageOwner/OwnerServiceRequests";
 import CustomerTracking from "../../features/Customer/CustomerTracking";
 import OwnerTechnicianTasks from "../../features/GarageOwner/OwnerTechnicianTasks";
+import TechnicianTaskDetails from "../../features/Technician/TechnicianTaskDetails";
+import OwnerServiceRequestDetails from "../../features/GarageOwner/OwnerServiceRequestDetails";
 
 export const router = createBrowserRouter([
   {
@@ -59,8 +61,8 @@ export const router = createBrowserRouter([
           { path: "reset-password", element: <ResetPassword /> },
           { path: "set-password", element: <SetPassword /> },
           { path: "unauthorized", element: <Unauthorized /> },
-          {path: "/garages/:serviceId",element: <CustomerGaragesPage />,},
-          {path: "/track/:trackingToken",element: <CustomerTracking />,},
+          { path: "/garages/:serviceId", element: <CustomerGaragesPage /> },
+          { path: "/track/:trackingToken", element: <CustomerTracking /> },
         ],
       },
 
@@ -98,7 +100,10 @@ export const router = createBrowserRouter([
                   { path: "owner/dashboard", element: <OwnerHome /> },
                   { path: "owner/garages", element: <MyGarages /> },
                   { path: "owner/garages/request", element: <RequestGarage /> },
-                  { path: "owner/garages/serviceRequests", element: <OwnerServiceRequests /> },
+                  {
+                    path: "owner/garages/serviceRequests",
+                    element: <OwnerServiceRequests />,
+                  },
                   {
                     path: "owner/garages/register-document",
                     element: <OwnerRegistrationDocuments />,
@@ -118,11 +123,13 @@ export const router = createBrowserRouter([
                     element: <GarageServiceOptions />,
                   },
                   {
-                     path: "owner/technician-tasks",
+                    path: "owner/technician-tasks",
                     element: <OwnerTechnicianTasks />,
-                   },
-
-                  
+                  },
+                  {
+                    path: "owner/service-requests/:requestId",
+                    element: <OwnerServiceRequestDetails />,
+                  },
                 ],
               },
               {
@@ -130,7 +137,7 @@ export const router = createBrowserRouter([
                 children: [
                   { path: "technician/dashboard", element: <TechnicianHome /> },
                   { path: "technician/location", element: <ShareLocation /> },
-                  
+                  {path: "technician/tasks/:assignmentId",element: <TechnicianTaskDetails />,},
                 ],
               },
             ],

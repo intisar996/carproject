@@ -1,21 +1,35 @@
 import { useEffect, useState } from "react";
-import {Alert,Box,Button,CircularProgress,Dialog,DialogActions,DialogContent,DialogTitle,
-  FormControl,Grid,InputLabel,MenuItem,Select,TextField,Typography,} from "@mui/material";
+import {Alert,Box,Button,CircularProgress,Dialog, DialogActions,DialogContent,
+  DialogTitle,FormControl,Grid,InputLabel,MenuItem,Select,TextField,Typography,} from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import StatusTabs, { type StatusTabOption } from "../Common/StatusTabs";
 import ServiceRequestCard from "../Common/ServiceRequestCard";
-import {acceptServiceRequestAsync,assignTechnicianAsync,fetchOwnerServiceRequestsAsync,fetchTechniciansAsync,rejectServiceRequestAsync,} from "./serviceRequestsSlice";
+import {acceptServiceRequestAsync,assignTechnicianAsync,fetchOwnerServiceRequestsAsync,
+  fetchTechniciansAsync,rejectServiceRequestAsync,} from "./serviceRequestsSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function OwnerServiceRequests() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const {requests,technicians,status,techniciansStatus,actionStatus,error,} = useAppSelector((state) => state.serviceRequests);
+  const {
+    requests,
+    technicians,
+    status,
+    techniciansStatus,
+    actionStatus,
+    error,
+  } = useAppSelector((state) => state.serviceRequests);
 
   const [selectedStatus, setSelectedStatus] = useState("ALL");
-  const [selectedRequestId, setSelectedRequestId] = useState<number | null>(null);
-  const [selectedTechnicianId, setSelectedTechnicianId] = useState<number | "">("");
+  const [detailsRequestId, setDetailsRequestId] = useState<number | null>(null);
+  const [selectedRequestId, setSelectedRequestId] = useState<number | null>(
+    null,
+  );
+  const [selectedTechnicianId, setSelectedTechnicianId] = useState<number | "">(
+    "",
+  );
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [rejectRequestId, setRejectRequestId] = useState<number | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
@@ -44,12 +58,14 @@ export default function OwnerServiceRequests() {
     {
       value: "IN_PROGRESS",
       label: "In Progress",
-      count: requests.filter((request) => request.status === "IN_PROGRESS").length,
+      count: requests.filter((request) => request.status === "IN_PROGRESS")
+        .length,
     },
     {
       value: "COMPLETED",
       label: "Completed",
-      count: requests.filter((request) => request.status === "COMPLETED").length,
+      count: requests.filter((request) => request.status === "COMPLETED")
+        .length,
     },
     {
       value: "REJECTED",
@@ -59,7 +75,8 @@ export default function OwnerServiceRequests() {
     {
       value: "CANCELLED",
       label: "Cancelled",
-      count: requests.filter((request) => request.status === "CANCELLED").length,
+      count: requests.filter((request) => request.status === "CANCELLED")
+        .length,
     },
   ];
 
@@ -142,26 +159,25 @@ export default function OwnerServiceRequests() {
     <Box>
       <Box sx={{ mb: 4 }}>
         <Typography
-          variant="h4"
-          sx={{ fontWeight: 700, color: "#0f172a", mb: 1 }}
-        >
+          variant='h4'
+          sx={{ fontWeight: 700, color: "#0f172a", mb: 1 }}>
           Service Requests
         </Typography>
-        <Typography variant="body1" sx={{ color: "#64748b" }}>
+        <Typography variant='body1' sx={{ color: "#64748b" }}>
           Manage customer requests and assign technicians.
         </Typography>
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+        <Alert severity='error' sx={{ mb: 3, borderRadius: 2 }}>
           {error}
         </Alert>
       )}
 
       {requests.length === 0 ? (
-        <Alert severity="info" sx={{ borderRadius: 2 }}>
+        <Alert severity='info' sx={{ borderRadius: 2 }}>
           <Typography sx={{ fontWeight: 600 }}>No service requests</Typography>
-          <Typography variant="body2">
+          <Typography variant='body2'>
             Customer requests will appear here.
           </Typography>
         </Alert>
@@ -174,16 +190,13 @@ export default function OwnerServiceRequests() {
           />
 
           {filteredRequests.length === 0 ? (
-            <Alert severity="info" sx={{ borderRadius: 2 }}>
+            <Alert severity='info' sx={{ borderRadius: 2 }}>
               No requests found in this category.
             </Alert>
           ) : (
             <Grid container spacing={3}>
               {filteredRequests.map((request) => (
-                <Grid
-                  key={request.requestId}
-                  size={{ xs: 12, md: 6, lg: 4 }}
-                >
+                <Grid key={request.requestId} size={{ xs: 12, md: 6, lg: 4 }}>
                   <ServiceRequestCard
                     request={request}
                     actionLoading={actionStatus === "loading"}
@@ -191,6 +204,9 @@ export default function OwnerServiceRequests() {
                     onAccept={handleAccept}
                     onReject={handleOpenReject}
                     onAssign={handleOpenAssign}
+                    onViewDetails={(requestId) =>
+                    navigate(`/owner/service-requests/${requestId}`)
+                    }
                   />
                 </Grid>
               ))}
@@ -206,11 +222,10 @@ export default function OwnerServiceRequests() {
           setSelectedTechnicianId("");
         }}
         fullWidth
-        maxWidth="sm"
-      >
+        maxWidth='sm'>
         <DialogTitle sx={{ fontWeight: 700 }}>Assign Technician</DialogTitle>
         <DialogContent>
-          <Typography variant="body2" sx={{ color: "#64748b", mb: 3 }}>
+          <Typography variant='body2' sx={{ color: "#64748b", mb: 3 }}>
             Select an available technician for this service request.
           </Typography>
 
@@ -218,9 +233,9 @@ export default function OwnerServiceRequests() {
             <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
               <CircularProgress />
             </Box>
-          ) : technicians.filter((technician) => technician.isAvailable).length ===
-            0 ? (
-            <Alert severity="warning">
+          ) : technicians.filter((technician) => technician.isAvailable)
+              .length === 0 ? (
+            <Alert severity='warning'>
               No available technicians found for this garage.
             </Alert>
           ) : (
@@ -228,11 +243,10 @@ export default function OwnerServiceRequests() {
               <InputLabel>Technician</InputLabel>
               <Select
                 value={selectedTechnicianId}
-                label="Technician"
+                label='Technician'
                 onChange={(event) =>
                   setSelectedTechnicianId(event.target.value as number)
-                }
-              >
+                }>
                 {technicians
                   .filter((technician) => technician.isAvailable)
                   .map((technician) => (
@@ -253,21 +267,20 @@ export default function OwnerServiceRequests() {
               setSelectedRequestId(null);
               setSelectedTechnicianId("");
             }}
-            sx={{ textTransform: "none" }}
-          >
+            sx={{ textTransform: "none" }}>
             Cancel
           </Button>
           <Button
-            variant="contained"
+            variant='contained'
             disabled={
               selectedTechnicianId === "" ||
               actionStatus === "loading" ||
               techniciansStatus === "loading" ||
-              technicians.filter((technician) => technician.isAvailable).length === 0
+              technicians.filter((technician) => technician.isAvailable)
+                .length === 0
             }
             onClick={handleAssign}
-            sx={{ textTransform: "none", borderRadius: 2 }}
-          >
+            sx={{ textTransform: "none", borderRadius: 2 }}>
             {actionStatus === "loading" ? "Assigning..." : "Assign Technician"}
           </Button>
         </DialogActions>
@@ -282,11 +295,12 @@ export default function OwnerServiceRequests() {
           }
         }}
         fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle sx={{ fontWeight: 700 }}>Reject Service Request</DialogTitle>
+        maxWidth='sm'>
+        <DialogTitle sx={{ fontWeight: 700 }}>
+          Reject Service Request
+        </DialogTitle>
         <DialogContent>
-          <Typography variant="body2" sx={{ color: "#64748b", mb: 2 }}>
+          <Typography variant='body2' sx={{ color: "#64748b", mb: 2 }}>
             Please explain why you are rejecting this request. The customer will
             be able to see the reason.
           </Typography>
@@ -295,8 +309,8 @@ export default function OwnerServiceRequests() {
             multiline
             minRows={3}
             maxRows={6}
-            label="Reason for rejection"
-            placeholder="For example: This service is not available at our garage."
+            label='Reason for rejection'
+            placeholder='For example: This service is not available at our garage.'
             value={rejectionReason}
             onChange={(event) => {
               setRejectionReason(event.target.value);
@@ -315,18 +329,16 @@ export default function OwnerServiceRequests() {
               setRejectError("");
             }}
             disabled={actionStatus === "loading"}
-            sx={{ textTransform: "none" }}
-          >
+            sx={{ textTransform: "none" }}>
             Cancel
           </Button>
           <Button
-            variant="contained"
-            color="error"
+            variant='contained'
+            color='error'
             startIcon={<CancelIcon />}
             disabled={actionStatus === "loading" || !rejectionReason.trim()}
             onClick={handleReject}
-            sx={{ textTransform: "none", borderRadius: 2 }}
-          >
+            sx={{ textTransform: "none", borderRadius: 2 }}>
             {actionStatus === "loading" ? "Rejecting..." : "Confirm Rejection"}
           </Button>
         </DialogActions>

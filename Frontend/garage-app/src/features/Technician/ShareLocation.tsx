@@ -20,9 +20,11 @@ import {
 
 import type { TechnicianAssignment } from "../../app/models/TechnicianAssignment";
 import TechnicianTaskCard from "./TechnicianTaskCard";
+import { useNavigate } from "react-router-dom";
 
 export default function ShareLocation() {
   const { t } = useTranslation();
+const navigate = useNavigate();
 
   const [assignments, setAssignments] = useState<
     TechnicianAssignment[]
@@ -128,9 +130,9 @@ export default function ShareLocation() {
   !loading && (
     <TechnicianTaskCard
       assignments={assignments}
-      locatingAssignmentId={locatingAssignmentId}
-      sendingAssignmentId={sendingAssignmentId}
-      onShareLocation={shareLocation}
+      onViewDetails={(assignment) =>
+    navigate(`/technician/tasks/${assignment.assignmentId}`)
+  }
     />
   )
 )}

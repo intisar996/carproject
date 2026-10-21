@@ -1,19 +1,5 @@
-import {
-  useRef,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
-
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import {useRef,useState,type ChangeEvent,type FormEvent,} from "react";
+import {Box,Button,CircularProgress,IconButton,Paper,TextField,Typography} from "@mui/material";
 
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import SendIcon from "@mui/icons-material/Send";
@@ -818,13 +804,12 @@ export default function ChatAssistant({
               flexDirection: "column",
             }}
           >
-            {/* Header */}
             <Box
               sx={{
                 px: 2,
                 py: 1.6,
                 background:
-                  "linear-gradient(135deg, var(--dark-oringe))",
+                  "linear-gradient(135deg, var(--navy-color))",
                 color: "white",
                 display: "flex",
                 justifyContent: "space-between",
@@ -844,7 +829,7 @@ export default function ChatAssistant({
                     height: 44,
                     borderRadius: "50%",
                     background:
-                      "rgba(255,255,255,0.15)",
+                      "var(--dark-oringe)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

@@ -28,6 +28,10 @@ public class TechnicianTaskResponseDTO {
 
     private AssignmentStatus status;
 
+    private BigDecimal latitude;
+    private BigDecimal longitude;
+
+
     private BigDecimal currentLatitude;
 
     private BigDecimal currentLongitude;
@@ -46,6 +50,8 @@ public class TechnicianTaskResponseDTO {
                 .status(entity.getStatus())
                 .currentLatitude(entity.getServiceRequest().getLatitude())
                 .currentLongitude(entity.getServiceRequest().getLongitude())
+                .latitude(entity.getServiceRequest().getLatitude())
+                .longitude(entity.getServiceRequest().getLongitude())
                 .build();
     }
 

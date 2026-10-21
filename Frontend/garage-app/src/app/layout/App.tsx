@@ -73,7 +73,7 @@ function App() {
       createTheme({
         direction: isRtl ? "rtl" : "ltr",
         palette: {
-          primary: { main: "#F5D34A" },
+          primary: { main: "#000000" },
           secondary: { main: "#000000" },
           background: { default: "#F5F7FA" },
         },

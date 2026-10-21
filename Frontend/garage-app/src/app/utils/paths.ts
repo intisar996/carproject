@@ -34,7 +34,7 @@ export const paths = {
 
   technicianDashboard: "/technician/dashboard",
   technicianLocation: "/technician/location",
-} as const;
+  technicianTaskDetails: (assignmentId: number | string) => `/technician/tasks/${assignmentId}`,} as const;
 
 export function homePathForRole(role?: string | null): string {
   switch (role) {

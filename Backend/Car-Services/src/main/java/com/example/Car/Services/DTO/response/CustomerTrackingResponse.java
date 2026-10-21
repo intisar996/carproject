@@ -1,15 +1,16 @@
+
 package com.example.Car.Services.DTO.response;
 
+import com.example.Car.Services.entities.ServiceCustomerRequest;
+import com.example.Car.Services.entities.TechnicianAssignment;
 import com.example.Car.Services.enums.AssignmentStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerTrackingResponse {
@@ -18,7 +19,6 @@ public class CustomerTrackingResponse {
     private Long assignmentId;
 
     private String garageName;
-
     private String technicianName;
 
     private AssignmentStatus status;
@@ -26,7 +26,25 @@ public class CustomerTrackingResponse {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    
+    private BigDecimal customerLatitude;
+    private BigDecimal customerLongitude;
 
+    public static CustomerTrackingResponse convertToDTO(
+            ServiceCustomerRequest request,
+            TechnicianAssignment assignment,
+            String garageName,
+            String technicianName) {
+
+        return CustomerTrackingResponse.builder()
+                .requestId(request.getRequestId())
+                .assignmentId(assignment.getAssignmentId())
+                .garageName(garageName)
+                .technicianName(technicianName)
+                .status(assignment.getStatus())
+                .latitude(assignment.getCurrentLatitude())
+                .longitude(assignment.getCurrentLongitude())
+                .customerLatitude(request.getLatitude())
+                .customerLongitude(request.getLongitude())
+                .build();
+    }
 }
-

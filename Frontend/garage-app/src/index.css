@@ -64,3 +64,9 @@ html, body, #root {
     color:var(--navy-color) !important;
 
 }
+
+
+.css-1kof7mf-MuiStack-root {
+
+justify-content: space-between !important;
+}
